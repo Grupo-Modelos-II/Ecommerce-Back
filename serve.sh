@@ -6,7 +6,7 @@ option=$1
 port=0
 
 #Logica del script
-function set_env(){
+function generate_environment(){
     if  [ ! -d ./env ]
     then
         python3 -m venv env
@@ -15,10 +15,10 @@ function set_env(){
     pip install -r requirements.txt
 }
 
-function set_port(){
+function define_vars(){
     if [ -f .env ]
     then
-        cat .env | export
+        export $(cat .env)
         port=$PORT
     else
         port=3000
@@ -40,8 +40,8 @@ function start_service(){
 
 clear
 
-set_env
+generate_environment
 
-set_port
+define_vars
 
 start_service
