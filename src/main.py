@@ -1,5 +1,7 @@
 from fastapi import FastAPI
-from config.globalConfig import init_app
+from config.serverConfig import init_app
 
 server = FastAPI()
-init_app(server)
+
+if __name__ == 'main':
+    init_app(server)
