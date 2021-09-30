@@ -1,21 +1,27 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from service.ClientService import delete_client_service
+from sqlalchemy.orm import Session
 
-clientController = APIRouter(prefix='/clients')
+from service.ClientService import get_clients_service, get_client_service, create_client_service, delete_client_service
 
-@clientController.get('/')
-def get_all_clients():
-    pass
+from config.databaseConfig import get_db
 
-@clientController.get('/{id}')
-def get_client(id):
-    pass
+from dto.Client import ClientRequest, ClientResponse
 
-@clientController.post('/save')
-def create_client(client):
-    pass
+clientController = APIRouter(prefix='/client')
+
+@clientController.get('/', response_model=list[ClientResponse])
+def get_all_clients(session: Session = Depends(get_db)):
+    return get_clients_service(session)
+
+@clientController.get('/{id}', response_model=ClientResponse)
+def get_client(id, session: Session = Depends(get_db)):
+    return get_client_service(session, id)
+
+@clientController.post('/save', response_model=ClientResponse)
+def create_client(client: ClientRequest, session: Session = Depends(get_db)):
+    return create_client_service(session, client)
 
 @clientController.delete('/{id}')
-def delete_client(id):
-    pass
+def delete_client(id, session: Session = Depends(get_db)):
+    delete_client_service(session, id)

@@ -10,6 +10,8 @@ class Identifier_Type(Base):
     id = Column(String, primary_key=True)
     name = Column(String(255), unique=True, nullable=False)
 
+    clients = relationship("Client", back_populates="identifier_type")
+
     def __init__(self, **kwargs):
         self.id = str(uuid4())
         self.name = kwargs["name"]
@@ -18,10 +20,20 @@ class Client(Base):
     __tablename__ = 'Client'
     id = Column(String, primary_key=True)
     id_identifier_type = Column(String, ForeignKey('Identifier_Type.id'), nullable=False)
-    identifier = Column(BigInteger, unique=True, nullable=False)
+    identifier = Column(String, unique=True, nullable=False)
     name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False)
     location = Column(String(255), nullable=False)
     credits = Column(BigInteger, nullable=False)
 
+    identifier_type = relationship("Identifier_Type", back_populates="clients")
     transactions = relationship("Transaction", back_populates="clients")
+
+    def __init__(self, **kwargs):
+        self.id = str(uuid4())
+        self.id_identifier_type = kwargs["id_identifier_type"]
+        self.identifier = kwargs["identifier"]
+        self.name = kwargs["name"]
+        self.email = kwargs["email"]
+        self.location = kwargs["location"]
+        self.credits = kwargs["credits"]
