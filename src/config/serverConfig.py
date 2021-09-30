@@ -1,8 +1,9 @@
-from controller.userController import userController
-from .databaseConfig import init_db, get_db
+from controller.clientController import clientController
+from controller.identifierTypeController import identifierTypeController
+from .databaseConfig import init_db
 
 def init_app(server):
     #handle routes for Api
-    server.include_router(userController)
+    server.include_router(clientController)
+    server.include_router(identifierTypeController)
     init_db()
-    db = get_db()

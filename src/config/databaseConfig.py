@@ -7,7 +7,7 @@ from os import getenv
 _DATABASE_URL = f"postgresql://{getenv('DB_USER')}:{getenv('DB_PASSWORD')}@{getenv('DB_HOST')}:{getenv('DB_PORT')}/{getenv('DB_NAME')}"
 
 _engine = create_engine(_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+SessionLocal = sessionmaker(bind=_engine)
 
 Base = declarative_base()
 
