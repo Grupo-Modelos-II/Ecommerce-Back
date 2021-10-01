@@ -16,6 +16,9 @@ class Identifier_Type(Base):
         self.id = str(uuid4())
         self.name = kwargs["name"]
 
+    def to_dict(self):
+        return {'id':self.id,'name':self.name,'clients':self.clients}
+
 class Client(Base):
     __tablename__ = 'Client'
     id = Column(String, primary_key=True)
@@ -37,3 +40,16 @@ class Client(Base):
         self.email = kwargs["email"]
         self.location = kwargs["location"]
         self.credits = kwargs["credits"]
+
+    def to_dict(self):
+        return {
+            'id':self.id,
+            'id_identifier_type':self.id_identifier_type,
+            'identifier':self.identifier,
+            'name':self.name,
+            'email':self.email,
+            'location':self.location,
+            'credits':self.credits,
+            'identifier_type':self.identifier_type,
+            'transactions':self.transactions
+        }
