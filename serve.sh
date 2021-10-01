@@ -13,6 +13,7 @@ function generate_environment(){
     fi
     source env/bin/activate
     pip install -r requirements.txt
+    clear
 }
 
 function define_vars(){
