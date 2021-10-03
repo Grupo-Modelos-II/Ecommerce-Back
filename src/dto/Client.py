@@ -7,6 +7,7 @@ class ClientRequest(BaseModel):
     identifier: str
     name: str
     email: str
+    password: str
     location: str
     credits: int
 
@@ -16,6 +17,7 @@ class ClientResponse(BaseModel):
     identifier: str
     name: str
     email: str
+    password: str
     location: str
     credits: int
 
