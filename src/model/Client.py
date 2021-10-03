@@ -26,6 +26,7 @@ class Client(Base):
     identifier = Column(String, unique=True, nullable=False)
     name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False)
+    password = Column(String(255),nullable=False)
     location = Column(String(255), nullable=False)
     credits = Column(BigInteger, nullable=False)
 
@@ -38,6 +39,7 @@ class Client(Base):
         self.identifier = kwargs["identifier"]
         self.name = kwargs["name"]
         self.email = kwargs["email"]
+        self.password = kwargs["password"]
         self.location = kwargs["location"]
         self.credits = kwargs["credits"]
 
@@ -48,6 +50,7 @@ class Client(Base):
             'identifier':self.identifier,
             'name':self.name,
             'email':self.email,
+            'password':self.password,
             'location':self.location,
             'credits':self.credits,
             'identifier_type':self.identifier_type,
