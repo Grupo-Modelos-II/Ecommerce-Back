@@ -8,21 +8,21 @@ from security.authSecurity import crypt_password
 clientController = APIRouter(prefix='/client')
 
 @clientController.get('/', response_model=list[ClientResponse])
-def get_all_clients(session: Session = Depends(get_db)):
+def get_all_clients(session: Session = Depends(get_db)) -> list[ClientResponse]:
     return get_clients_service(session)
 
-@clientController.get('/test/hash/{password}')
-def test(password):
+@clientController.get('/test/hash', response_model=str)
+def test(password: str) -> str:
     return crypt_password(password)
 
 @clientController.get('/{id}', response_model=ClientResponse)
-def get_client(id, session: Session = Depends(get_db)):
+def get_client(id, session: Session = Depends(get_db)) -> ClientResponse:
     return get_client_service(session, id)
 
 @clientController.post('/', response_model=ClientResponse)
-def create_client(client: ClientRequest, session: Session = Depends(get_db)):
+def create_client(client: ClientRequest, session: Session = Depends(get_db)) -> ClientResponse:
     return create_client_service(session, client)
 
-@clientController.delete('/{id}')
-def delete_client(id, session: Session = Depends(get_db)):
+@clientController.delete('/{id}', response_model=None)
+def delete_client(id, session: Session = Depends(get_db)) -> None:
     delete_client_service(session, id)

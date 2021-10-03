@@ -9,18 +9,18 @@ from service.IdentifierTypeService import get_identifier_type_service, get_ident
 
 identifierTypeController = APIRouter(prefix='/identifier-type')
 
-@identifierTypeController.get('/{id}')
-def get_identifier_type(id, session: Session = Depends(get_db)):
+@identifierTypeController.get('/{id}', response_model=IdentifierTypeResponse)
+def get_identifier_type(id, session: Session = Depends(get_db)) -> IdentifierTypeResponse:
     return get_identifier_type_service(session, id)
 
-@identifierTypeController.get('/')
-def get_all_identifier_types(session: Session = Depends(get_db)):
+@identifierTypeController.get('/', response_model=list[IdentifierTypeResponse])
+def get_all_identifier_types(session: Session = Depends(get_db)) -> list[IdentifierTypeResponse]:
     return get_identifier_types_service(session)
 
 @identifierTypeController.post('/save', response_model=IdentifierTypeResponse)
-def create_identifier_type(identifierType: IdentifierTypeRequest, session: Session = Depends(get_db)):
+def create_identifier_type(identifierType: IdentifierTypeRequest, session: Session = Depends(get_db)) -> IdentifierTypeResponse:
     return create_identifier_type_service(session, identifierType)
 
-@identifierTypeController.delete('/{id}')
-def delete_identifier_type(id, session: Session = Depends(get_db)):
+@identifierTypeController.delete('/{id}', response_model=None)
+def delete_identifier_type(id, session: Session = Depends(get_db)) -> None:
     return delete_identifier_type_service(session, id)
