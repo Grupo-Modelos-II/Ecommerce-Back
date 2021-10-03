@@ -1,19 +1,12 @@
-def char_to_int(character: str) -> int:
-    return ord(character) - ord('a')
-
-def int_to_char(ascii: int) -> str:
-    return chr(ascii + ord('a'))
-
-def displace(cypher: str, displacement: int) -> str:
-    if(cypher == ' '):
-        return ' '
-    elif(cypher == '"'):
-        return '"'
+def concat(password: str, secret: str) -> str:
+    return password + secret
+    
+def mix_password(password: str, secret: str) -> str:
+    if password and secret:
+        return concat(password[0], secret[0]) + mix_password(password[1:], secret[1:])
+    elif password and not secret:
+        return password
+    elif secret and not password:
+        return secret
     else:
-        return int_to_char((char_to_int(cypher)+displacement) % 26)
-
-def cipher(word: str,displacement: int) -> str:
-    return ''.join([displace(x, displacement) for x in word])
-
-def decrypt(word: str, ascii: int) -> str:
-    return ''.join([displace(x, -ascii) for x in word])
+        return ""
