@@ -2,10 +2,7 @@ from pydantic import BaseModel
 
 from .Category import CategoryResponse
 
-from typing import Optional
-
 class ProductRequest(BaseModel):
-    id: Optional[str] = None
     name: str
     id_category: str
     description: str

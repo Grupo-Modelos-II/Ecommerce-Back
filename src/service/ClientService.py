@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import Update
 
-from dto.Client import ClientRequest, ClientResponse
+from dto.Client import ClientRequest, ClientResponse, ClientUpdateRequest
 
 from model import Client
 
@@ -10,6 +11,14 @@ def delete_client_service(session: Session, id) -> bool:
     session.commit()
     session.refresh(client)
     return client is None
+
+def update_client_service(session: Session, request: ClientUpdateRequest) -> ClientResponse:
+    client = session.query(Client).get(request.id)
+    client.update(**request.dict())
+    session.flush()
+    session.commit()
+    session.refresh(client)
+    return ClientResponse(**client.to_dict())
 
 def create_client_service(session: Session, request: ClientRequest) -> ClientResponse:
     client = Client(**request.dict())

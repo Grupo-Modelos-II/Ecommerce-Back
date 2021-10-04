@@ -13,7 +13,7 @@ class Category(Base):
     products = relationship("Product", back_populates="category")
 
     def __init__(self,**kwargs):
-        self.id = kwargs['id'] or str(uuid4())
+        self.id = str(uuid4())
         self.name = kwargs['name']
 
 
@@ -36,7 +36,7 @@ class Product(Base):
     purchases = relationship("Purchased", back_populates="product")
 
     def __init__(self,**kwargs):
-        self.id = kwargs['id'] or str(uuid4())
+        self.id = str(uuid4())
         self.id_category = kwargs['id_category']
         self.name = kwargs['name']
         self.description = kwargs['description']

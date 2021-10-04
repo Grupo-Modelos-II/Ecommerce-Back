@@ -3,10 +3,7 @@ from datetime import date
 from .Client import ClientResponse
 from .Purchased import PurchasedResponse
 
-from typing import Optional
-
 class TransactionRequest(BaseModel):
-    id: Optional[str] = None
     id_client: str
     total: int
 
