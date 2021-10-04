@@ -15,6 +15,7 @@ def create_product_service(session: Session, request: ProductRequest) -> Product
     product = Product(**request.dict())
     session.add(product)
     session.commit()
+    session.refresh(product)
     return ProductResponse(**product.to_dict())
 
 def get_products_service(session: Session) -> list[ProductResponse]:

@@ -13,7 +13,7 @@ class Identifier_Type(Base):
     clients = relationship("Client", back_populates="identifier_type")
 
     def __init__(self, **kwargs):
-        self.id = str(uuid4())
+        self.id = kwargs['id'] or str(uuid4())
         self.name = kwargs["name"]
 
     def to_dict(self):
@@ -31,10 +31,10 @@ class Client(Base):
     credits = Column(BigInteger, nullable=False)
 
     identifier_type = relationship("Identifier_Type", back_populates="clients")
-    transactions = relationship("Transaction", back_populates="clients")
+    transactions = relationship("Transaction", back_populates="client")
 
     def __init__(self, **kwargs):
-        self.id = str(uuid4())
+        self.id = kwargs['id'] or str(uuid4())
         self.id_identifier_type = kwargs["id_identifier_type"]
         self.identifier = kwargs["identifier"]
         self.name = kwargs["name"]

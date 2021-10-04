@@ -6,7 +6,6 @@ from model import Client
 
 def delete_client_service(session: Session, id) -> bool:
     client = session.query(Client).get(id)
-    print(client)
     session.delete(client)
     session.commit()
     session.refresh(client)
@@ -16,6 +15,7 @@ def create_client_service(session: Session, request: ClientRequest) -> ClientRes
     client = Client(**request.dict())
     session.add(client)
     session.commit()
+    session.refresh(client)
     return ClientResponse(**client.to_dict())
     
 def get_clients_service(session: Session) -> list[ClientResponse]:

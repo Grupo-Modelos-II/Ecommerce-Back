@@ -8,6 +8,7 @@ def create_transaction_service(session: Session, request: TransactionRequest) ->
     transaction = Transaction(**request.dict())
     session.add(transaction)
     session.commit()
+    session.refresh(transaction)
     return TransactionResponse(**transaction.to_dict())
 
 def get_transactions_service(session: Session) -> list[TransactionResponse]:

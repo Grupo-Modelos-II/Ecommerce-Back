@@ -15,7 +15,8 @@ def create_identifier_type_service(session: Session, request: IdentifierTypeRequ
     identifierType = Identifier_Type(**request.dict())
     session.add(identifierType)
     session.commit()
-    return IdentifierTypeResponse(**identifierType.dict())
+    session.refresh(identifierType)
+    return IdentifierTypeResponse(**identifierType.to_dict())
 
 def get_identifier_types_service(session: Session) -> list[IdentifierTypeResponse]:
     identifierTypes = session.query(Identifier_Type).all()

@@ -18,9 +18,8 @@ class Transaction(Base):
     purchases = relationship('Purchased', back_populates='transaction')
 
     def __init__(self,**kwargs):
-       self.id = str(uuid4())
+       self.id = kwargs['id'] or str(uuid4())
        self.id_client = kwargs['id_client']
-       self.date = kwargs['date']
        self.total = kwargs['total']
       
 
@@ -43,6 +42,7 @@ class Purchased(Base):
     cost = Column(BigInteger, nullable=False)
 
     transaction = relationship('Transaction', back_populates='purchases')
+    product = relationship('Product', back_populates='purchases')
 
     def __init__(self,**kwargs):
         self.id = str(uuid4())
@@ -54,8 +54,8 @@ class Purchased(Base):
     def to_dict(self):
         return {
             'id':self.id,
-            'id_transaction':self.id_transaction,
-            'id_product':self.id_product,
+            'transaction':self.transaction,
+            'product':self.product,
             'amount':self.amount,
             'cost':self.cost
         }

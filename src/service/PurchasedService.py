@@ -15,6 +15,7 @@ def create_purchase_service(session: Session, request: PurchasedRequest) -> Purc
     product = Purchased(**request.dict())
     session.add(product)
     session.commit()
+    session.refresh(product)
     return PurchasedResponse(**product.to_dict())
 
 def get_purchaseds_service(session: Session) -> list[PurchasedResponse]:

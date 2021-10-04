@@ -15,11 +15,12 @@ def create_category_service(session: Session, request: CategoryRequest) -> Categ
     category = Category(**request.dict())
     session.add(category)
     session.commit()
+    session.refresh(category)
     return CategoryResponse(**category.to_dict())
 
 def get_categories_service(session: Session) -> list[CategoryResponse]:
     categories = session.query(Category).all()
-    return [CategoryResponse(**category.to_list()) for category in categories]
+    return [CategoryResponse(**category.to_dict()) for category in categories]
 
 def get_category_service(session: Session, id) -> CategoryResponse:
     category = session.query(Category).get(id)

@@ -1,16 +1,19 @@
 from pydantic import BaseModel
 from datetime import date
-from dto.Client import ClientResponse
+from .Client import ClientResponse
+from .Purchased import PurchasedResponse
+
+from typing import Optional
 
 class TransactionRequest(BaseModel):
+    id: Optional[str] = None
     id_client: str
-    date: date
     total: int
 
 class TransactionResponse(BaseModel):
-    id_transaction: str
+    id: str
     client: ClientResponse
-    purchases: PurchasedResponse
+    purchases: list[PurchasedResponse]
     date: date
     total: int
 
