@@ -7,28 +7,27 @@ from dto.Category import CategoryRequest, CategoryResponse
 from config.securityConfig import auth_scheme
 from security.middlewares.AuthMiddleware import AuthMiddleware
 
-routerProduct = APIRouter(prefix='/product')
-productControllerRest = Controller(routerProduct)
+routerCategory = APIRouter(prefix='/product')
+categoryControllerRest = Controller(routerCategory)
+@categoryControllerRest.resource()
+class CategoryController:
 
-@productControllerRest.resource()
-class ProductController:
-
-    @productControllerRest.route.get("/", summary="Get All Products", response_model=list[ProductResponse])
-    def get_all_products(self, session: Session = Depends(get_db)) -> list[ProductResponse]:
+    @categoryControllerRest.route.get("/", summary="Get All Categories", response_model=list[CategoryResponse])
+    def get_all_products(self, session: Session = Depends(get_db)) -> list[CategoryResponse]:
         return get_categories_service(session)
 
-    @productControllerRest.route.get("/{id}",summary="Get Specific Product", response_model=ProductResponse)
-    def get_product(self, response: Response, id: str, session: Session = Depends(get_db)) -> ProductResponse:
+    @categoryControllerRest.route.get("/{id}",summary="Get Specific Category", response_model=CategoryResponse)
+    def get_product(self, response: Response, id: str, session: Session = Depends(get_db)) -> CategoryResponse:
         product = get_category_service(session, id)
         if product is None:
             response.status_code = 404
         return product
 
-    @productControllerRest.route.post('/',summary="Creation of a Product",response_model=ProductResponse)
-    def create_product(self,category: ProductRequest, session: Session = Depends(get_db)) -> ProductResponse:
+    @categoryControllerRest.route.post('/',summary="Creation of a Category",response_model=CategoryResponse)
+    def create_product(self,category: CategoryRequest, session: Session = Depends(get_db)) -> CategoryResponse:
         return create_category_service(session, category)
 
-    @productControllerRest.route.delete('/{id}',summary="Delete Data Product", response_model=bool)
+    @categoryControllerRest.route.delete('/{id}',summary="Delete Data Category", response_model=bool)
     def delete_client(self, id, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> bool:
         isValidToken = AuthMiddleware.hasNotExpired(token)
         if isValidToken:
