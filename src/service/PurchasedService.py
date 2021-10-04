@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
-
 from dto.Purchased import PurchasedRequest, PurchasedResponse
-
+from service.TransactionServices import get_transaction_service
 from model import Purchased
 
 def delete_purchase_service(session: Session, id) -> bool:
@@ -16,6 +15,8 @@ def create_purchase_service(session: Session, request: PurchasedRequest) -> Purc
     session.add(product)
     session.commit()
     session.refresh(product)
+    transactionData = get_transaction_service(session,request.id_transaction)
+    transactionData.total += request.amount * request.cost
     return PurchasedResponse(**product.to_dict())
 
 def get_purchaseds_service(session: Session) -> list[PurchasedResponse]:

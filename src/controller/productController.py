@@ -30,7 +30,7 @@ class ProductController:
 
     @productControllerRest.route.delete('/{id}',summary="Delete Data Product", response_model=bool)
     def delete_client(self, id, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> bool:
-        isValidToken = AuthMiddleware.hasNotExpired(token)
+        isValidToken = AuthMiddleware.enabledToken(token,session)
         if isValidToken:
             return delete_product_service(session, id)
         return False

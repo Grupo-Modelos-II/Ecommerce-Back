@@ -10,6 +10,12 @@ class TransactionRequest(BaseModel):
     id_client: str
     total: int
 
+class TransactionEditRequest(BaseModel):
+    id:str
+    id_client:Optional[str] = None
+    date:Optional[str] = None
+    total:Optional[int] = None
+
 class TransactionResponse(BaseModel):
     id: str
     client: ClientResponse
