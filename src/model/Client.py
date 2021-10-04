@@ -13,7 +13,7 @@ class Identifier_Type(Base):
     clients = relationship("Client", back_populates="identifier_type")
 
     def __init__(self, **kwargs):
-        self.id = kwargs['id'] or str(uuid4())
+        self.id = str(uuid4())
         self.name = kwargs["name"]
 
     def to_dict(self):
@@ -34,7 +34,7 @@ class Client(Base):
     transactions = relationship("Transaction", back_populates="client")
 
     def __init__(self, **kwargs):
-        self.id = kwargs['id'] or str(uuid4())
+        self.id = str(uuid4())
         self.id_identifier_type = kwargs["id_identifier_type"]
         self.identifier = kwargs["identifier"]
         self.name = kwargs["name"]
@@ -56,3 +56,12 @@ class Client(Base):
             'identifier_type':self.identifier_type,
             'transactions':self.transactions
         }
+
+    def update(self, **kwargs):
+        self.id_identifier_type = kwargs["id_identifier_type"] or self.id_identifier_type
+        self.identifier = kwargs["identifier"] or self.identifier
+        self.name = kwargs["name"] or self.name
+        self.email = kwargs["email"] or self.email
+        self.password = kwargs["password"] or self.password
+        self.location = kwargs["location"] or self.location
+        self.credits = kwargs["credits"] or self.credits

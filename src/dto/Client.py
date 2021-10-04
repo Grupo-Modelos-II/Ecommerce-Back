@@ -5,7 +5,6 @@ from .IdentifierType import IdentifierTypeResponse
 from typing import Optional
 
 class ClientRequest(BaseModel):
-    id: Optional[str] = None
     id_identifier_type: str
     identifier: str
     name: str
@@ -23,6 +22,19 @@ class ClientResponse(BaseModel):
     password: str
     location: str
     credits: int
+
+    class Config:
+        orm_mode = True
+
+class ClientUpdateRequest(BaseModel):
+    id: str
+    id_identifier_type: Optional[str]
+    identifier: Optional[str]
+    name: Optional[str]
+    email: Optional[str]
+    password: Optional[str]
+    location: Optional[str]
+    credits: Optional[int]
 
     class Config:
         orm_mode = True

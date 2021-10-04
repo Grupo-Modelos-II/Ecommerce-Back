@@ -18,7 +18,7 @@ class Transaction(Base):
     purchases = relationship('Purchased', back_populates='transaction')
 
     def __init__(self,**kwargs):
-       self.id = kwargs['id'] or str(uuid4())
+       self.id = str(uuid4())
        self.id_client = kwargs['id_client']
        self.total = kwargs['total']
       
