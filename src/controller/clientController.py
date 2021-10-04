@@ -43,7 +43,11 @@ class ClientController:
         return create_client_service(session, client)
 
     @clientControllerRest.route.put('/', summary="Update Client values", response_model=ClientResponse)
-    def update_client(self, client: ClientUpdateRequest, session: Session = Depends(get_db)) -> ClientResponse:
+    def update_client(self, response:Response,client: ClientUpdateRequest, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> ClientResponse:
+        isValidToken = AuthMiddleware.enabledToken(token,session)
+        if not isValidToken:
+            response.status_code = 401
+            return None
         return update_client_service(session, client)
 
     @clientControllerRest.route.delete('/{id}',summary="Delete Data Client", response_model=bool)

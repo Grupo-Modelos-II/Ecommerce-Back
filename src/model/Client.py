@@ -64,4 +64,4 @@ class Client(Base):
         self.email = kwargs["email"] or self.email
         self.password = kwargs["password"] or self.password
         self.location = kwargs["location"] or self.location
-        self.credits = kwargs["credits"] or self.credits
+        self.credits = kwargs["credits"] if kwargs['credits'] is not None else self.credits

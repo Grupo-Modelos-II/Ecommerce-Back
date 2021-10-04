@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from dto.Transaction import TransactionRequest, TransactionResponse,TransactionEditRequest
+from dto.Transaction import TransactionRequest, TransactionResponse,TransactionUpdateRequest
 
 from model import Transaction
 
@@ -23,5 +23,10 @@ def get_transaction_by_id_client_service(session: Session, id_client) -> list[Tr
     transactions = session.query(Transaction).filter(Transaction.id_client == id_client).all()
     return [TransactionResponse(**transaction.to_dict()) for transaction in transactions]
 
-def update_transaction_service(session:Session,request:TransactionRequest) -> TransactionResponse:
-    pass
+def update_transaction_service(session:Session,request:TransactionUpdateRequest) -> TransactionResponse:
+    transaction = session.query(Transaction).get(request.id)
+    transaction.update(**request.dict())
+    session.flush()
+    session.commit()
+    session.refresh(transaction)
+    return TransactionResponse(**transaction.to_dict())
