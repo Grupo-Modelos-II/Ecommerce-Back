@@ -7,7 +7,7 @@ from dto.Category import CategoryRequest, CategoryResponse
 from config.securityConfig import auth_scheme
 from security.middlewares.AuthMiddleware import AuthMiddleware
 
-routerCategory = APIRouter(prefix='/product')
+routerCategory = APIRouter(prefix='/category')
 categoryControllerRest = Controller(routerCategory)
 @categoryControllerRest.resource()
 class CategoryController:
