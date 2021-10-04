@@ -3,8 +3,10 @@ from util.hash import mix_password
 from random import randint
 from os import getenv
 
+from time import time
+
 def sign_token(data_payload):
-    return encode(data_payload,getenv('SECRET'),algorithm=str(getenv('ALGORITHM')))
+    return encode({**data_payload, "exp": int(time()) + int(getenv("EXPIRATION_TIME"))},getenv('SECRET'), algorithm=str(getenv('ALGORITHM')))
 
 def get_payload(token):
     return decode(token, getenv('SECRET'), algorithms=[str(getenv('ALGORITHM'))],options={"verify_exp": False})

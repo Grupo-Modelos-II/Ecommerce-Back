@@ -10,7 +10,7 @@ class Category(Base):
     id = Column(String, primary_key=True)
     name = Column(String(255), nullable=False)
 
-    products = relationship("Product", back_populates="categories")
+    products = relationship("Product", back_populates="category")
 
     def __init__(self,**kwargs):
         self.id = str(uuid4())
@@ -32,7 +32,7 @@ class Product(Base):
     description = Column(String(255), nullable=False)
     cost = Column(BigInteger, nullable=False)
 
-    categories = relationship("Category", back_populates="products")
+    category = relationship("Category", back_populates="products")
     products_variations = relationship("Product_Variation", back_populates="products")
 
     def __init__(self,**kwargs):

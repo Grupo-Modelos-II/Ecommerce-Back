@@ -4,11 +4,13 @@ from dto.Client import ClientRequest, ClientResponse
 
 from model import Client
 
-def delete_client_service(session: Session, id) -> None:
+def delete_client_service(session: Session, id) -> bool:
     client = session.query(Client).get(id)
     print(client)
     session.delete(client)
     session.commit()
+    session.refresh(client)
+    return client is None
 
 def create_client_service(session: Session, request: ClientRequest) -> ClientResponse:
     client = Client(**request.dict())
@@ -22,8 +24,8 @@ def get_clients_service(session: Session) -> list[ClientResponse]:
 
 def get_client_service(session: Session, id) -> ClientResponse:
     client = session.query(Client).get(id)
-    return ClientResponse(**client.to_dict())
+    return ClientResponse(**client.to_dict()) if client else None
 
 def get_client_by_email(session:Session,email:str) -> ClientResponse:
     client = session.query(Client).filter(Client.email == email).first()
-    return ClientResponse(**client.to_dict())
+    return ClientResponse(**client.to_dict()) if client else None
