@@ -20,7 +20,7 @@ class ClientController:
 
     @clientControllerRest.route.get("/", summary="Get All Clients", response_model=list[ClientResponse])
     def get_all_clients(self, response: Response, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> list[ClientResponse]:
-        isValidToken = AuthMiddleware.hasNotExpired(token)
+        isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
             response.status_code = 401
             return []
@@ -28,7 +28,7 @@ class ClientController:
 
     @clientControllerRest.route.get("/{id}",summary="Get Specific Client", response_model=ClientResponse)
     def get_client(self, response: Response, id: str, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> ClientResponse:
-        isValidToken = AuthMiddleware.hasNotExpired(token)
+        isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
             response.status_code = 401
             return None
@@ -43,12 +43,16 @@ class ClientController:
         return create_client_service(session, client)
 
     @clientControllerRest.route.put('/', summary="Update Client values", response_model=ClientResponse)
-    def update_client(self, client: ClientUpdateRequest, session: Session = Depends(get_db)) -> ClientResponse:
+    def update_client(self, response:Response,client: ClientUpdateRequest, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> ClientResponse:
+        isValidToken = AuthMiddleware.enabledToken(token,session)
+        if not isValidToken:
+            response.status_code = 401
+            return None
         return update_client_service(session, client)
 
     @clientControllerRest.route.delete('/{id}',summary="Delete Data Client", response_model=bool)
     def delete_client(self, id, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> bool:
-        isValidToken = AuthMiddleware.hasNotExpired(token)
+        isValidToken = AuthMiddleware.enabledToken(token,session)
         if isValidToken:
             return delete_client_service(session, id)
         return False

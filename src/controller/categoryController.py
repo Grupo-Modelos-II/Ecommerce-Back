@@ -29,7 +29,7 @@ class CategoryController:
 
     @categoryControllerRest.route.delete('/{id}',summary="Delete Data Category", response_model=bool)
     def delete_category(self, id, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> bool:
-        isValidToken = AuthMiddleware.hasNotExpired(token)
+        isValidToken = AuthMiddleware.enabledToken(token,session)
         if isValidToken:
             return delete_category_service(session, id)
         return False

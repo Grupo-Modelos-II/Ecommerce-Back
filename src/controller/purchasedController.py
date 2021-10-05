@@ -26,11 +26,12 @@ class PurchaseController:
 
     @purchaseControllerRest.route.post('/',summary="Creation of a Purchase",response_model=PurchasedResponse)
     def create_purchase(self,purchase: PurchasedRequest, session: Session = Depends(get_db)) -> PurchasedResponse:
+        
         return create_purchase_service(session, purchase)
 
     @purchaseControllerRest.route.delete('/{id}',summary="Delete Data Purchase", response_model=bool)
     def delete_purchase(self, id, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> bool:
-        isValidToken = AuthMiddleware.hasNotExpired(token)
+        isValidToken = AuthMiddleware.enabledToken(token,session)
         if isValidToken:
             return delete_purchase_service(session, id)
         return False

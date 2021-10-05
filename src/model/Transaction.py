@@ -32,6 +32,11 @@ class Transaction(Base):
             'client':self.client,
             'purchases':self.purchases
         }
+    
+    def update(self, **kwargs):
+        self.id = kwargs['id'] or self.id
+        self.id_client = kwargs['id_client'] or self.id_client
+        self.total = kwargs['total'] or self.total
 
 class Purchased(Base):
     __tablename__ = 'Purchased'
