@@ -1,3 +1,6 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from controller.clientController import ClientController
 from controller.authController import AuthController
 from controller.identifierTypeController import identifierTypeController
@@ -7,7 +10,7 @@ from controller.categoryController import CategoryController
 from controller.transactionController import TransactionController
 from .databaseConfig import init_db
 
-def init_app(server):
+def init_app(server: FastAPI):
     #handle routes for Api
     server.include_router(ClientController.router())
     server.include_router(AuthController.router())
@@ -16,4 +19,12 @@ def init_app(server):
     server.include_router(CategoryController.router())
     server.include_router(PurchaseController.router())
     server.include_router(TransactionController.router())
+
+    server.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     init_db()
