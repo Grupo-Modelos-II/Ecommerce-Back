@@ -7,29 +7,29 @@ from dto.Purchased import PurchasedRequest, PurchasedResponse
 from config.securityConfig import auth_scheme
 from security.middlewares.AuthMiddleware import AuthMiddleware
 
-routerPurchase = APIRouter(prefix='/purchase')
-purchaseControllerRest = Controller(routerPurchase)
+router = APIRouter(prefix='/purchase')
+controller = Controller(router)
 
-@purchaseControllerRest.resource()
+@controller.resource()
 class PurchaseController:
 
-    @purchaseControllerRest.route.get("/", summary="Get All Purchases", response_model=list[PurchasedResponse])
+    @controller.route.get("/", summary="Get All Purchases", response_model=list[PurchasedResponse])
     def get_all_purchases(self, session: Session = Depends(get_db)) -> list[PurchasedResponse]:
         return get_purchaseds_service(session)
 
-    @purchaseControllerRest.route.get("/{id}",summary="Get Specific Purchase", response_model=PurchasedResponse)
+    @controller.route.get("/{id}",summary="Get Specific Purchase", response_model=PurchasedResponse)
     def get_purchase(self, response: Response, id: str, session: Session = Depends(get_db)) -> PurchasedResponse:
         product = get_purchase_service(session, id)
         if product is None:
             response.status_code = 404
         return product
 
-    @purchaseControllerRest.route.post('/',summary="Creation of a Purchase",response_model=PurchasedResponse)
+    @controller.route.post('/',summary="Creation of a Purchase",response_model=PurchasedResponse)
     def create_purchase(self,purchase: PurchasedRequest, session: Session = Depends(get_db)) -> PurchasedResponse:
         
         return create_purchase_service(session, purchase)
 
-    @purchaseControllerRest.route.delete('/{id}',summary="Delete Data Purchase", response_model=bool)
+    @controller.route.delete('/{id}',summary="Delete Data Purchase", response_model=bool)
     def delete_purchase(self, id, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> bool:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if isValidToken:

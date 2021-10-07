@@ -12,13 +12,13 @@ from config.securityConfig import auth_scheme
 
 from security.middlewares.AuthMiddleware import AuthMiddleware
 
-routerClient = APIRouter(prefix='/client')
-clientControllerRest = Controller(routerClient)
+router = APIRouter(prefix='/client')
+controller = Controller(router)
 
-@clientControllerRest.resource()
+@controller.resource()
 class ClientController:
 
-    @clientControllerRest.route.get("/", summary="Get All Clients", response_model=list[ClientResponse])
+    @controller.route.get("/", summary="Get All Clients", response_model=list[ClientResponse])
     def get_all_clients(self, response: Response, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> list[ClientResponse]:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
@@ -26,7 +26,7 @@ class ClientController:
             return []
         return get_clients_service(session)
 
-    @clientControllerRest.route.get("/{id}",summary="Get Specific Client", response_model=ClientResponse)
+    @controller.route.get("/{id}",summary="Get Specific Client", response_model=ClientResponse)
     def get_client(self, response: Response, id: str, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> ClientResponse:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
@@ -37,12 +37,12 @@ class ClientController:
             response.status_code = 404
         return client
 
-    @clientControllerRest.route.post('/',summary="Creation of a Client",response_model=ClientResponse)
+    @controller.route.post('/',summary="Creation of a Client",response_model=ClientResponse)
     def create_client(self,client: ClientRequest, session: Session = Depends(get_db)) -> ClientResponse:
         client.password = crypt_password(client.password)
         return create_client_service(session, client)
 
-    @clientControllerRest.route.put('/', summary="Update Client values", response_model=ClientResponse)
+    @controller.route.put('/', summary="Update Client values", response_model=ClientResponse)
     def update_client(self, response:Response,client: ClientUpdateRequest, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> ClientResponse:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
@@ -50,7 +50,7 @@ class ClientController:
             return None
         return update_client_service(session, client)
 
-    @clientControllerRest.route.delete('/{id}',summary="Delete Data Client", response_model=bool)
+    @controller.route.delete('/{id}',summary="Delete Data Client", response_model=bool)
     def delete_client(self, id, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> bool:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if isValidToken:

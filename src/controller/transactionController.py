@@ -7,13 +7,13 @@ from dto.Transaction import TransactionRequest, TransactionResponse, Transaction
 from config.securityConfig import auth_scheme
 from security.middlewares.AuthMiddleware import AuthMiddleware
 
-routerTransaction = APIRouter(prefix='/transaction')
-transactionControllerRest = Controller(routerTransaction)
+router = APIRouter(prefix='/transaction')
+controller = Controller(router)
 
-@transactionControllerRest.resource()
+@controller.resource()
 class TransactionController:
 
-    @transactionControllerRest.route.get("/", summary="Get All Transactions", response_model=list[TransactionResponse])
+    @controller.route.get("/", summary="Get All Transactions", response_model=list[TransactionResponse])
     def get_all_transactions(self, response: Response, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> list[TransactionResponse]:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
@@ -21,7 +21,7 @@ class TransactionController:
             return []
         return get_transactions_service(session)
 
-    @transactionControllerRest.route.get("/{id}",summary="Get Specific Transaction", response_model=TransactionResponse)
+    @controller.route.get("/{id}",summary="Get Specific Transaction", response_model=TransactionResponse)
     def get_transaction(self, response: Response, id: str, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> TransactionResponse:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
@@ -32,7 +32,7 @@ class TransactionController:
             response.status_code = 404
         return transaction
 
-    @transactionControllerRest.route.get("/client/{id}", summary="Get All Transactions By Client", response_model=list[TransactionResponse])
+    @controller.route.get("/client/{id}", summary="Get All Transactions By Client", response_model=list[TransactionResponse])
     def get_transactions_by_client(self, response: Response, id: str, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> list[TransactionResponse]:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
@@ -41,7 +41,7 @@ class TransactionController:
         transactions = get_transaction_by_id_client_service(session, id)
         return transactions
 
-    @transactionControllerRest.route.post('/',summary="Creation of a Transaction",response_model=TransactionResponse)
+    @controller.route.post('/',summary="Creation of a Transaction",response_model=TransactionResponse)
     def create_transaction(self, response: Response, transaction: TransactionRequest, session: Session = Depends(get_db), token: str = Depends(auth_scheme)) -> TransactionResponse:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:
@@ -49,7 +49,7 @@ class TransactionController:
             return None
         return create_transaction_service(session, transaction)
 
-    @transactionControllerRest.route.put('/',summary = "Edit of a transaction",response_model = TransactionResponse)
+    @controller.route.put('/',summary = "Edit of a transaction",response_model = TransactionResponse)
     def update_transaction(self,response: Response,transaction:TransactionUpdateRequest,session:Session = Depends(get_db), token: str = Depends(auth_scheme)) -> TransactionResponse:
         isValidToken = AuthMiddleware.enabledToken(token,session)
         if not isValidToken:

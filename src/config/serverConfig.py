@@ -8,7 +8,20 @@ from controller.productController import ProductController
 from controller.purchasedController import PurchaseController
 from controller.categoryController import CategoryController
 from controller.transactionController import TransactionController
+from controller.fileController import FileController
+
 from .databaseConfig import init_db
+
+from .firebaseConfig import init_firebase
+
+def _set_cors(server: FastAPI):
+    server.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 def init_app(server: FastAPI):
     #handle routes for Api
@@ -19,12 +32,12 @@ def init_app(server: FastAPI):
     server.include_router(CategoryController.router())
     server.include_router(PurchaseController.router())
     server.include_router(TransactionController.router())
+    server.include_router(FileController.router())
+    #generate cors for server
+    _set_cors(server)
 
-    server.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=False,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    #create database tables
     init_db()
+
+    #initialize firebase
+    init_firebase()

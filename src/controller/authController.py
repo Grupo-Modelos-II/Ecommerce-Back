@@ -6,13 +6,13 @@ from dto.Auth import AuthRequest
 from security.authSecurity import sign_token,verify_password
 from service.ClientService import get_client_by_email
 
-routerAuth = APIRouter(prefix='/auth')
-authControllerRest = Controller(routerAuth)
+router = APIRouter(prefix='/auth')
+controller = Controller(router)
 
-@authControllerRest.resource()
+@controller.resource()
 class AuthController:
 
-    @authControllerRest.route.post("/login",summary="Get All Clients", response_model=dict)
+    @controller.route.post("/login",summary="Get All Clients", response_model=dict)
     def login_user(self,authData:AuthRequest,session: Session = Depends(get_db)):
         userData = get_client_by_email(session,authData.email)
         verifiedData = False if (not userData) else verify_password(userData.password,authData.password)
