@@ -16,12 +16,12 @@ def create_identifier_type_service(session: Session, request: IdentifierTypeRequ
     session.add(identifierType)
     session.commit()
     session.refresh(identifierType)
-    return IdentifierTypeResponse(**identifierType.to_dict())
+    return IdentifierTypeResponse(**identifierType.dict())
 
 def get_identifier_types_service(session: Session) -> list[IdentifierTypeResponse]:
     identifierTypes = session.query(Identifier_Type).all()
-    return [IdentifierTypeResponse(**identifierType.to_dict()) for identifierType in identifierTypes]
+    return [IdentifierTypeResponse(**identifierType.dict()) for identifierType in identifierTypes]
 
 def get_identifier_type_service(session: Session, id) -> IdentifierTypeResponse:
     identifierType = session.query(Identifier_Type).get(id)
-    return IdentifierTypeResponse(**identifierType.to_dict()) if identifierType else None
+    return IdentifierTypeResponse(**identifierType.dict()) if identifierType else None

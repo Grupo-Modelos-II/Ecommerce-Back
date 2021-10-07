@@ -29,12 +29,12 @@ def create_purchase_service(session: Session, request: PurchasedRequest) -> Purc
     session.commit()
     session.refresh(purchase)
 
-    return PurchasedResponse(**purchase.to_dict())
+    return PurchasedResponse(**purchase.dict())
 
 def get_purchaseds_service(session: Session) -> list[PurchasedResponse]:
     products = session.query(Purchased).all()
-    return [PurchasedResponse(**product.to_dict()) for product in products]
+    return [PurchasedResponse(**product.dict()) for product in products]
 
 def get_purchase_service(session: Session, id) -> PurchasedResponse:
     product = session.query(Purchased).get(id)
-    return PurchasedResponse(**product.to_dict()) if product else None
+    return PurchasedResponse(**product.dict()) if product else None

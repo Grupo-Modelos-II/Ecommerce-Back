@@ -23,7 +23,7 @@ class Transaction(Base):
        self.total = kwargs['total']
       
 
-    def to_dict(self):
+    def dict(self):
        return {
             'id':self.id,
             'id_client':self.id_client,
@@ -56,7 +56,7 @@ class Purchased(Base):
         self.amount = kwargs['amount']
         self.cost = kwargs['cost']
 
-    def to_dict(self):
+    def dict(self):
         return {
             'id':self.id,
             'transaction':self.transaction,

@@ -17,7 +17,7 @@ class Category(Base):
         self.name = kwargs['name']
 
 
-    def to_dict(self):
+    def dict(self):
         return {
             'id':self.id,
             'name':self.name,
@@ -29,6 +29,7 @@ class Product(Base):
     id = Column(String, primary_key=True)
     id_category = Column(String, ForeignKey('Category.id'), nullable=False)
     name = Column(String(255), nullable=False)
+    amount = Column(Integer, nullable=False)
     description = Column(String(255), nullable=False)
     cost = Column(BigInteger, nullable=False)
 
@@ -39,14 +40,16 @@ class Product(Base):
         self.id = str(uuid4())
         self.id_category = kwargs['id_category']
         self.name = kwargs['name']
+        self.amount = kwargs['amount']
         self.description = kwargs['description']
         self.cost = kwargs['cost']
 
-    def to_dict(self):
+    def dict(self):
         return {
             'id':self.id,
             'id_category':self.id_category,
             'name':self.name,
+            'amount':self.amount,
             'description':self.description,
             'cost':self.cost,
             'category':self.category

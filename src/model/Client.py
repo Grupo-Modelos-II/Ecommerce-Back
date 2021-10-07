@@ -16,7 +16,7 @@ class Identifier_Type(Base):
         self.id = str(uuid4())
         self.name = kwargs["name"]
 
-    def to_dict(self):
+    def dict(self):
         return {'id':self.id,'name':self.name,'clients':self.clients}
 
 class Client(Base):
@@ -43,7 +43,7 @@ class Client(Base):
         self.location = kwargs["location"]
         self.credits = kwargs["credits"]
 
-    def to_dict(self):
+    def dict(self):
         return {
             'id':self.id,
             'id_identifier_type':self.id_identifier_type,
