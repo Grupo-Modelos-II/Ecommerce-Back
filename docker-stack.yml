@@ -11,8 +11,6 @@ services:
       restart_policy:
         condition: on-failure
         delay: 5s
-      placement:
-        constraints: [node.hostname == glud.udistrital.edu.co]
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=reverse_proxy"
