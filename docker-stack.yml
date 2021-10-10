@@ -34,8 +34,6 @@ services:
       restart_policy:
         condition: on-failure
         delay: 5s
-    depends_on: 
-      - default
 volumes:
   data:
 
