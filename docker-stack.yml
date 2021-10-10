@@ -17,7 +17,7 @@ services:
         - "traefik.http.routers.ecommerce.entrypoints=websecure"
         - "traefik.http.routers.ecommerce.rule=Host(`lgsus.glud.org`)"
         - "traefik.http.routers.ecommerce.service=ecommerce"
-        - "traefik.http.services.ecommerce.loadbalancer.server.port=${PORT}"
+        - "traefik.http.services.ecommerce.loadbalancer.server.port=5000"
     depends_on: 
       - database
           
