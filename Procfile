@@ -1,1 +1,1 @@
-web: sh server.sh prod
+web: sh serve.sh prod
