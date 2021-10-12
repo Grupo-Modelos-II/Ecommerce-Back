@@ -14,17 +14,6 @@ def delete_purchase_service(session: Session, id) -> bool:
 
 def create_purchase_service(session: Session, request: PurchasedRequest) -> PurchasedResponse:
     purchase = Purchased(**request.dict())
-
-    transactionData = get_transaction_service(session,request.id_transaction)
-    productData = get_product_service(session,request.id_product)
-
-    if(productData.cost * purchase.amount != purchase.cost):
-        purchase.cost = productData.cost * purchase.amount
-
-    transactionData.total += purchase.cost
-    transactionUpdateData = TransactionUpdateRequest(**transactionData.dict())
-    update_transaction_service(session,transactionUpdateData)
-
     session.add(purchase)
     session.commit()
     session.refresh(purchase)
