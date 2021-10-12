@@ -10,12 +10,20 @@ class ProductRequest(BaseModel):
     description: str
     cost: int
 
+
+class ProductImage(BaseModel):
+    id_product: str
+    image: str
+
+    class Config:
+        orm_mode = True
+
 class ProductResponse(BaseModel):
     id: str
     name: str
     amount: int
     mainImage: Optional[str]
-    images: Optional[list[str]]
+    images: list[ProductImage]
     category: CategoryResponse
     description: str
     cost: int
@@ -27,7 +35,3 @@ class ProductResponse(BaseModel):
     @validator('mainImage')
     def set_mainImage(cls, mainImage):
         return mainImage or ''
-
-    @validator('images')
-    def set_images(cls, images):
-        return images or []

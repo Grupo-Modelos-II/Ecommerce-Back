@@ -1,20 +1,32 @@
 from tempfile import SpooledTemporaryFile
+from sqlalchemy.orm import Session
 
 from config.firebaseConfig import get_storage_client
 
-def upload_file_service(file: SpooledTemporaryFile, destination: str, content_type: str) -> str:
+from .ProductService import get_product_service
+
+from model import Product_Image
+from model.Product import Product
+
+def upload_main_file_service(file: SpooledTemporaryFile, destination: str, content_type: str, session: Session, id: str) -> str:
+    product = session.query(Product).get(id)
     bucket = get_storage_client()
     blob = bucket.blob(destination)
     blob.upload_from_file(file, content_type = content_type)
     blob.make_public()
+    product.mainImage = blob.public_url
+    session.flush()
+    session.commit()
+    session.refresh(product)
     return blob.public_url
 
-def get_file_url_service(file_name: str) -> str:
-    listUrl = get_list_file_url_service(file_name, 1)
-    return listUrl[0] if len(listUrl) > 0 else None
-
-def get_list_file_url_service(folder_location: str, max_results: int = None) -> list[str]:
+def upload_file_service(file: SpooledTemporaryFile, destination: str, content_type: str, session: Session, id: str) -> str:
     bucket = get_storage_client()
-    blobs = bucket.list_blobs(prefix=folder_location, max_results=max_results)
-    listUrl = [blob.public_url for blob in blobs]
-    return listUrl[1:] if max_results is None else listUrl
+    blob = bucket.blob(destination)
+    blob.upload_from_file(file, content_type = content_type)
+    blob.make_public()
+    product_image = Product_Image(id_product = id, image = blob.public_url)
+    session.add(product_image)
+    session.commit()
+    session.refresh(product_image)
+    return blob.public_url

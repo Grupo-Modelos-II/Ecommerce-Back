@@ -32,9 +32,11 @@ class Product(Base):
     amount = Column(Integer, nullable=False)
     description = Column(String(255), nullable=False)
     cost = Column(BigInteger, nullable=False)
+    mainImage = Column(String(255))
 
     category = relationship("Category", back_populates="products")
     purchases = relationship("Purchased", back_populates="product")
+    images = relationship("Product_Image", back_populates="product")
 
     def __init__(self,**kwargs):
         self.id = str(uuid4())
@@ -47,10 +49,28 @@ class Product(Base):
     def dict(self):
         return {
             'id':self.id,
-            'id_category':self.id_category,
             'name':self.name,
             'amount':self.amount,
             'description':self.description,
             'cost':self.cost,
-            'category':self.category
+            'category':self.category,
+            'mainImage':self.mainImage,
+            'images':self.images,
+        }
+
+class Product_Image(Base):
+    __tablename__ = 'Product_Image'
+    id_product = Column(String(255), ForeignKey('Product.id'), nullable=False, primary_key=True)
+    image = Column(String(255), nullable=False, primary_key=True)
+
+    product = relationship("Product", back_populates="images")
+
+    def __init__(self,**kwargs):
+        self.id_product = kwargs['id_product']
+        self.image = kwargs['image']
+
+    def dict(self):
+        return {
+            'id_product':self.id_product,
+            'image':self.image
         }
