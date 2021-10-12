@@ -11,13 +11,6 @@ services:
       restart_policy:
         condition: on-failure
         delay: 5s
-      labels:
-        - "traefik.enable=true"
-        - "traefik.docker.network=reverse_proxy"
-        - "traefik.http.routers.ecommerce.entrypoints=websecure"
-        - "traefik.http.routers.ecommerce.rule=Host(`lgsus.glud.org`)"
-        - "traefik.http.routers.ecommerce.service=ecommerce"
-        - "traefik.http.services.ecommerce.loadbalancer.server.port=5000"
     depends_on: 
       - database
           

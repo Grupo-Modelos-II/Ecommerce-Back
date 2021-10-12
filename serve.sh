@@ -41,8 +41,8 @@ function start_service(){
 
 clear
 
-# generate_environment
+generate_environment
 
-# define_vars
+define_vars
 
 start_service
