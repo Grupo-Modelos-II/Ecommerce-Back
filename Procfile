@@ -1,0 +1,1 @@
+web: bash serve.sh prod
